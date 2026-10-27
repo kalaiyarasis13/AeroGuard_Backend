@@ -22,6 +22,85 @@ namespace AeroGuard.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AeroGuard.Models.AIAnalysisRun", b =>
+                {
+                    b.Property<int>("AnalysisRunID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AnalysisRunID"));
+
+                    b.Property<string>("AnalysisType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ImageID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelVersion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ResultSource")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("AnalysisRunID");
+
+                    b.HasIndex("ImageID");
+
+                    b.ToTable("AIAnalysisRuns");
+                });
+
+            modelBuilder.Entity("AeroGuard.Models.AIFinding", b =>
+                {
+                    b.Property<int>("FindingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FindingID"));
+
+                    b.Property<int>("AnalysisRunID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClassName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<double>("Confidence")
+                        .HasColumnType("float");
+
+                    b.Property<int>("X1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X2")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y1")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y2")
+                        .HasColumnType("int");
+
+                    b.HasKey("FindingID");
+
+                    b.HasIndex("AnalysisRunID");
+
+                    b.ToTable("AIFindings");
+                });
+
             modelBuilder.Entity("AeroGuard.Models.Survey", b =>
                 {
                     b.Property<int>("SurveyID")
@@ -90,6 +169,28 @@ namespace AeroGuard.Migrations
                     b.ToTable("SurveyImages");
                 });
 
+            modelBuilder.Entity("AeroGuard.Models.AIAnalysisRun", b =>
+                {
+                    b.HasOne("AeroGuard.Models.SurveyImage", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("AeroGuard.Models.AIFinding", b =>
+                {
+                    b.HasOne("AeroGuard.Models.AIAnalysisRun", "AnalysisRun")
+                        .WithMany("Findings")
+                        .HasForeignKey("AnalysisRunID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AnalysisRun");
+                });
+
             modelBuilder.Entity("AeroGuard.Models.SurveyImage", b =>
                 {
                     b.HasOne("AeroGuard.Models.Survey", "Survey")
@@ -99,6 +200,11 @@ namespace AeroGuard.Migrations
                         .IsRequired();
 
                     b.Navigation("Survey");
+                });
+
+            modelBuilder.Entity("AeroGuard.Models.AIAnalysisRun", b =>
+                {
+                    b.Navigation("Findings");
                 });
 
             modelBuilder.Entity("AeroGuard.Models.Survey", b =>

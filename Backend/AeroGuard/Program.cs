@@ -3,6 +3,7 @@ using AeroGuard.Data;
 using AeroGuard.Repositories.Implementation;
 using AeroGuard.Repositories.Interface;
 using AeroGuard.Services.Implementation;
+using AeroGuard.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace AeroGuard
@@ -31,10 +32,12 @@ namespace AeroGuard
 
             builder.Services.AddScoped<
                 IImageRepository, ImageRepository>();
+            builder.Services.AddScoped<IAnalysisRepository, AnalysisRepository>();
 
             // Services
             builder.Services.AddScoped<ImageStorageService>();
             builder.Services.AddScoped<MockAIService>();
+            builder.Services.AddScoped<IAnalysisService, AnalysisService>();
 
             var app = builder.Build();
 
