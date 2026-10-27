@@ -7,5 +7,7 @@ namespace AeroGuard.Repositories.Interface
         Task<SurveyImage> AddAsync(SurveyImage image);
 
         Task<List<SurveyImage>> GetBySurveyAsync(int surveyId);
+
+        Task<SurveyImage?> GetByIdAsync(int imageId);
     }
 }

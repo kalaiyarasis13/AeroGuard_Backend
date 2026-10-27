@@ -34,6 +34,7 @@ namespace AeroGuard
 
             // Services
             builder.Services.AddScoped<ImageStorageService>();
+            builder.Services.AddScoped<MockAIService>();
 
             var app = builder.Build();
 

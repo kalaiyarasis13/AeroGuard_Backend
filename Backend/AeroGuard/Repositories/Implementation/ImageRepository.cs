@@ -33,5 +33,12 @@ namespace AeroGuard.Repositories.Implementation
                 .OrderByDescending(x => x.UploadedAt)
                 .ToListAsync();
         }
+
+        public async Task<SurveyImage?> GetByIdAsync(int imageId)
+        {
+            return await _context.SurveyImages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ImageID == imageId);
+        }
     }
 }
